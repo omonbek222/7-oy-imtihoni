@@ -1,30 +1,19 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 
 interface LoginProps {
   onLoginSuccess: () => void;
 }
 
-const Login = ({ onLoginSuccess }: LoginProps) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [error, setError] = useState<string>('');
 
-  const handleLogin = async () => {
+  const handleLogin = () => {
     setError('');
-    try {
-      const response = await axios.post('http://localhost:7070/api/auth/login', {
-        username,
-        password,
-      });
-
-      if (response.status === 200 && response.data.token) {
-        localStorage.setItem('token', response.data.token);
-        onLoginSuccess();
-      } else {
-        setError('Login yoki parol noto‘g‘ri!');
-      }
-    } catch (err) {
+    if (username === 'admin' && password === '1234') {
+      onLoginSuccess();
+    } else {
       setError('Login yoki parol noto‘g‘ri!');
     }
   };
@@ -57,7 +46,7 @@ const Login = ({ onLoginSuccess }: LoginProps) => {
 
         <button
           onClick={handleLogin}
-          className="bg-white text-black px-4 py-2 rounded-lg w-full font-semibold hover:bg-black hover:text-white transition-colors duration-300"
+          className="bg-white text-black border border-black px-4 py-2 rounded-lg w-full font-semibold hover:bg-black hover:text-white transition-colors duration-300"
         >
           Kirish
         </button>
