@@ -1,9 +1,7 @@
-// src/api.ts
-import axios from 'axios';
 
-// Proxy ishlatiladi, shuning uchun 'https://admin-crm.onrender.com' emas, faqat '/api'
+import axios from 'axios';
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: 'https://admin-crm.onrender.com',
   headers: {
     'Content-Type': 'application/json',
   },

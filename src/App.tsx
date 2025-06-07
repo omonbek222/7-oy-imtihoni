@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
-import Login from './Login';
-import AdminPanel from './AdminPanel';
+import Login from './Login';        
+import AdminPanel from './AdminPanel'; 
 
 const App: React.FC = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
-    return !!localStorage.getItem('token');
-  });
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleLoginSuccess = () => {
-    localStorage.setItem('token', 'dummy-token'); 
     setIsLoggedIn(true);
   };
 

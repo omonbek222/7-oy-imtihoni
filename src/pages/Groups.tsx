@@ -16,7 +16,7 @@ const Groups = () => {
   const [filteredGroups, setFilteredGroups] = useState<Group[]>([]);
 
   useEffect(() => {
-    axios.get('https://admin-crm.onrender.com/guruhlar')
+    axios.get('http://localhost:7070/api/student/added-new-group-student')
       .then(res => {
         setGroups(res.data);
         setFilteredGroups(res.data);
@@ -38,7 +38,7 @@ const Groups = () => {
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
-        <button className="bg-blue-600 px-4 py-2 rounded text-white hover:bg-blue-700">
+        <button className="bg-[#1f1f1f] bg-[#1f1f1f] text-white px-4 py-2 rounded">
           Guruh qo'shish
         </button>
         <input

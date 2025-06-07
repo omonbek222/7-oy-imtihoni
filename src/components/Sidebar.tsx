@@ -52,7 +52,7 @@ const Sidebar = ({ active, onSelect }: SidebarProps) => {
             key={item.id}
             onClick={() => onSelect(item.id)}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-left hover:bg-gray-800 transition ${
-              active === item.id ? 'bg-gray-800' : ''
+              active === item.id ? 'bg-gray-500' : ''
             }`}
           >
             {item.icon}

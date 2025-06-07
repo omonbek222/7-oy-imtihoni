@@ -8,18 +8,30 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
+  const [success, setSuccess] = useState<boolean>(false); 
 
   const handleLogin = () => {
     setError('');
-    if (username === 'admin' && password === '1234') {
-      onLoginSuccess();
+    if (username === 'usern88@mail.ru' && password === '12345678') {
+      setSuccess(true);       
+      setTimeout(() => {
+        setSuccess(false);    
+        onLoginSuccess();     
+      }, 3000);
     } else {
       setError('Login yoki parol noto‘g‘ri!');
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black">
+    <div className="min-h-screen flex items-center justify-center bg-black relative">
+      
+      {success && (
+        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-white text-black px-6 py-2 rounded shadow-md font-semibold">
+         ✅ Siz tizimga kirdingiz!
+        </div>
+      )}
+
       <div className="bg-black border-2 border-gray-700 p-10 rounded-2xl shadow-2xl w-[500px]">
         <h2 className="text-3xl font-bold mb-2 text-white text-center">Xush kelibsiz 👋</h2>
         <span className="block text-sm text-gray-300 mb-6 text-center">

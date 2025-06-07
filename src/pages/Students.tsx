@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { IoSearch } from 'react-icons/io5';
+import { FaEllipsisV } from 'react-icons/fa';
 
-interface Student {
+interface Group {
   id: string;
   ism: string;
   familiya: string;
@@ -10,80 +12,103 @@ interface Student {
   holat: string;
 }
 
-const Students = () => {
-  const [students, setStudents] = useState<Student[]>([]);
+const Groups = () => {
+  const [groups, setGroups] = useState<Group[]>([]);
   const [search, setSearch] = useState('');
-  const [filteredStudents, setFilteredStudents] = useState<Student[]>([]);
+  const [filteredGroups, setFilteredGroups] = useState<Group[]>([]);
 
   useEffect(() => {
-    axios.get('https://admin-crm.onrender.com/studentlar')
+    axios.get('http://localhost:7070/api/student/create-student')
       .then(res => {
-        setStudents(res.data);
-        setFilteredStudents(res.data);
+        setGroups(res.data);
+        setFilteredGroups(res.data);
       })
-      .catch(err => console.error('Xatolik:', err));
+      .catch(err => console.error("Xatolik:", err));
   }, []);
 
   useEffect(() => {
-    const filtered = students.filter(s =>
-      s.ism.toLowerCase().includes(search.toLowerCase()) ||
-      s.familiya.toLowerCase().includes(search.toLowerCase()) ||
-      s.email.toLowerCase().includes(search.toLowerCase()) ||
-      s.rol.toLowerCase().includes(search.toLowerCase()) ||
-      s.holat.toLowerCase().includes(search.toLowerCase())
+    const filtered = groups.filter(g =>
+      g.ism.toLowerCase().includes(search.toLowerCase()) ||
+      g.familiya.toLowerCase().includes(search.toLowerCase()) ||
+      g.email.toLowerCase().includes(search.toLowerCase()) ||
+      g.rol.toLowerCase().includes(search.toLowerCase()) ||
+      g.holat.toLowerCase().includes(search.toLowerCase())
     );
-    setFilteredStudents(filtered);
-  }, [search, students]);
+    setFilteredGroups(filtered);
+  }, [search, groups]);
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-4">
-        <button className="bg-blue-600 px-4 py-2 rounded text-white hover:bg-blue-700">
-          Student qo'shish
-        </button>
-        <input
-          type="text"
-          placeholder="Qidiruv..."
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          className="px-3 py-2 rounded border border-gray-700 bg-black text-white focus:outline-none"
-        />
+    <div className="p-6 text-white w-full h-full">
+      <div className="text-sm text-gray-400 mb-1">
+        Asosiy &gt; <span className="text-white">Guruhlar</span>
       </div>
 
-      <table className="min-w-full table-auto border-collapse border border-gray-700">
-        <thead>
-          <tr className="bg-gray-800">
-            <th className="border border-gray-600 px-4 py-2">Ism</th>
-            <th className="border border-gray-600 px-4 py-2">Familiya</th>
-            <th className="border border-gray-600 px-4 py-2">Email</th>
-            <th className="border border-gray-600 px-4 py-2">Rol</th>
-            <th className="border border-gray-600 px-4 py-2">Holat</th>
-            <th className="border border-gray-600 px-4 py-2">Amallar</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredStudents.length === 0 && (
-            <tr>
-              <td colSpan={6} className="text-center py-4 text-gray-400">Ma'lumot topilmadi</td>
+      <h1 className="text-2xl font-semibold mb-6">Guruhlar ro'yxati</h1>
+
+      <div className="flex justify-end items-center gap-3 mb-4">
+        <div className="relative">
+          <IoSearch className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-400 text-lg" />
+          <input
+            type="text"
+            placeholder="Qidiruv..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            className="pl-10 pr-4 py-2 rounded bg-[#111] text-white border border-gray-700 focus:outline-none"
+          />
+        </div>
+
+        <button className="bg-[#1f1f1f] text-white px-4 py-2 rounded">
+          + Guruh qo'shish
+        </button>
+
+        <button className="bg-[#1f1f1f] hover:bg-[#2a2a2a] text-white px-4 py-2 rounded border border-gray-700">
+          All
+        </button>
+      </div>
+
+      <div className="overflow-x-auto rounded-lg">
+        <table className="min-w-full">
+          <thead>
+            <tr className="bg-[#1f1f1f] text-left text-sm text-gray-300">
+              <th className="py-3 px-4 font-medium">Ism</th>
+              <th className="py-3 px-4 font-medium">Familiya</th>
+              <th className="py-3 px-4 font-medium">Email</th>
+              <th className="py-3 px-4 font-medium">Rol</th>
+              <th className="py-3 px-4 font-medium">Holat</th>
+              <th className="py-3 px-4 font-medium">Amallar</th>
             </tr>
-          )}
-          {filteredStudents.map(student => (
-            <tr key={student.id} className="hover:bg-gray-900">
-              <td className="border border-gray-600 px-4 py-2">{student.ism}</td>
-              <td className="border border-gray-600 px-4 py-2">{student.familiya}</td>
-              <td className="border border-gray-600 px-4 py-2">{student.email}</td>
-              <td className="border border-gray-600 px-4 py-2">{student.rol}</td>
-              <td className="border border-gray-600 px-4 py-2">{student.holat}</td>
-              <td className="border border-gray-600 px-4 py-2">
-                <button className="text-blue-500 hover:underline mr-2">Tahrirlash</button>
-                <button className="text-red-500 hover:underline">O‘chirish</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="text-sm">
+            {filteredGroups.length > 0 ? (
+              filteredGroups.map(group => (
+                <tr
+                  key={group.id}
+                  className="bg-[#111] hover:bg-[#1c1c1c] border-b border-[#1c1c1c]"
+                >
+                  <td className="py-3 px-4">{group.ism}</td>
+                  <td className="py-3 px-4">{group.familiya}</td>
+                  <td className="py-3 px-4">{group.email}</td>
+                  <td className="py-3 px-4">{group.rol}</td>
+                  <td className="py-3 px-4">{group.holat}</td>
+                  <td className="py-3 px-4">
+                    <button className="text-gray-400 hover:text-white">
+                      <FaEllipsisV />
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={6} className="text-center py-6 text-gray-400">
+                  Hech qanday guruh topilmadi.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
 
-export default Students;
+export default Groups;

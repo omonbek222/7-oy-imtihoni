@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import authRouter from './routes/authRouter'; // 🔗 marshrutni ulaymiz
+import authRouter from './routes/authRouter'; 
 
 const app = express();
 const PORT = 7070;
@@ -12,7 +12,6 @@ app.use(cors({
 }));
 app.use(bodyParser.json());
 
-// Barcha `/api/auth/*` so'rovlarga authRouter ishlaydi
 app.use('/api/auth', authRouter);
 
 app.listen(PORT, () => {
