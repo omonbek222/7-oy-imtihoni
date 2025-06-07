@@ -53,3 +53,4 @@ export default tseslint.config({
 })
 ```
 # 7-oy-imtihoni
+# N88-7-oy-imtihon
