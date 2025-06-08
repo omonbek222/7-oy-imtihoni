@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   FaHome, FaUserTie, FaUsers, FaChalkboardTeacher, FaUserGraduate,
   FaLayerGroup, FaBook, FaMoneyBill, FaCog, FaUserCircle, FaSignOutAlt
