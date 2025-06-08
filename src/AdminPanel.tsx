@@ -93,7 +93,6 @@ const AdminPanel = () => {
         >
           <div className="text-lg font-semibold capitalize">{activeSection}</div>
           <div className="flex items-center gap-4">
-            {/* 🌙 Toggle Button with Dynamic Styles */}
             <button
               onClick={toggleDarkMode}
               className={`p-2 rounded transition-colors ${

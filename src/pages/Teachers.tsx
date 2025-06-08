@@ -29,7 +29,7 @@ const Teachers = () => {
   });
 
   useEffect(() => {
-    axios.get('http://localhost:7070/api/teacher/get-all') 
+    axios.get('http://localhost:5173/api/teacher/get-all') 
       .then(res => {
         setTeachers(res.data.teachers || []);
         setFilteredTeachers(res.data.teachers || []);

@@ -18,10 +18,14 @@ const Groups = () => {
   const [filteredGroups, setFilteredGroups] = useState<Group[]>([]);
 
   useEffect(() => {
-    axios.get('http://localhost:7070/api/student/create-student')
+    axios.get('http://localhost:5173/api/student/create-student')
       .then(res => {
-        setGroups(res.data);
-        setFilteredGroups(res.data);
+        console.log('API javobi:', res.data);
+
+        const data = Array.isArray(res.data) ? res.data : (res.data.data ?? []);
+
+        setGroups(data);
+        setFilteredGroups(data);
       })
       .catch(err => console.error("Xatolik:", err));
   }, []);
@@ -79,7 +83,7 @@ const Groups = () => {
             </tr>
           </thead>
           <tbody className="text-sm">
-            {filteredGroups.length > 0 ? (
+            {Array.isArray(filteredGroups) && filteredGroups.length > 0 ? (
               filteredGroups.map(group => (
                 <tr
                   key={group.id}

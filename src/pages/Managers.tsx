@@ -27,10 +27,16 @@ const Managers = () => {
   });
 
   useEffect(() => {
-    axios.get('http://localhost:7070/api/staff/create-manager')
+    axios.get('http://localhost:5173/api/staff/create-manager')
       .then(res => {
-        setManagers(res.data);
-        setFilteredManagers(res.data);
+        console.log('API response:', res.data);
+
+        const dataArray = Array.isArray(res.data) ? res.data : [];
+
+      
+
+        setManagers(dataArray);
+        setFilteredManagers(dataArray);
       })
       .catch(err => console.error('Xatolik:', err));
   }, []);
@@ -49,10 +55,10 @@ const Managers = () => {
   };
 
   const handleAddManager = () => {
-    axios.post('http://localhost:7070/api/staff/create-manager', newManager)
+    axios.post('http://localhost:5173/api/staff/create-manager', newManager)
       .then(res => {
-        setManagers([...managers, res.data]);
-        setFilteredManagers([...managers, res.data]);
+        setManagers(prev => [...prev, res.data]);
+        setFilteredManagers(prev => [...prev, res.data]);
         setNewManager({ ism: '', familiya: '', email: '', rol: '', holat: '' });
         setIsModalOpen(false);
       })
@@ -104,7 +110,7 @@ const Managers = () => {
             </tr>
           </thead>
           <tbody className="text-sm">
-            {filteredManagers.length > 0 ? (
+            {Array.isArray(filteredManagers) && filteredManagers.length > 0 ? (
               filteredManagers.map((manager) => (
                 <tr
                   key={manager.id}
@@ -133,7 +139,6 @@ const Managers = () => {
         </table>
       </div>
 
-   
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-[#1f1f1f] p-6 rounded-lg w-[400px]">
@@ -160,7 +165,7 @@ const Managers = () => {
               </button>
               <button
                 onClick={handleAddManager}
-                className="px-4 py-2 bg-gray-600 rounded bg-gray-600"
+                className="px-4 py-2 bg-gray-600 rounded hover:bg-gray-500"
               >
                 Qo‘shish
               </button>

@@ -8,7 +8,7 @@ interface Admin {
   first_name: string;
   last_name: string;
   email: string;
-  password: string;
+  password?: string;
   role: string;
   work_date: string;
   status: string;
@@ -34,9 +34,15 @@ const Admins = () => {
 
   useEffect(() => {
     axios
-      .get('http://localhost:7070/api/staff/adminlar')
+      .get('http://localhost:5173/api/staff/adminlar')
       .then((res) => {
-        setAdmins(res.data);
+        console.log('API response:', res.data);
+
+        const arr = Array.isArray(res.data) ? res.data : [];
+        // Agar API `{ data: [...] }` formatda bo'lsa, quyidagicha o'zgartiring:
+        // const arr = Array.isArray(res.data.data) ? res.data.data : [];
+
+        setAdmins(arr);
       })
       .catch((err) => console.error('Xatolik:', err));
   }, []);
@@ -53,10 +59,11 @@ const Admins = () => {
 
   const handleAddAdmin = () => {
     axios
-      .post('http://localhost:7070/api/staff/create-admin', newAdmin)
+      .post('http://localhost:5173/api/staff/create-admin', newAdmin)
       .then((res) => {
-        const addedAdmin = res.data.admin || res.data;
-        setAdmins((prev) => [...prev, addedAdmin]);
+        console.log('Added admin:', res.data);
+        const added: Admin = res.data.admin ?? res.data;
+        setAdmins((prev) => [...prev, added]);
         setShowModal(false);
         setNewAdmin({
           first_name: '',
@@ -70,7 +77,7 @@ const Admins = () => {
           is_deleted: false,
         });
       })
-      .catch((err) => console.error("Yangi admin qo‘shishda xatolik:", err));
+      .catch((err) => console.error("Xatolik:", err));
   };
 
   return (
@@ -83,45 +90,38 @@ const Admins = () => {
 
       <div className="flex justify-end items-center gap-3 mb-4">
         <div className="relative">
-          <IoSearch className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-400 text-lg" />
+          <IoSearch className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400 text-lg" />
           <input
             type="text"
             placeholder="Qidiruv..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-10 pr-4 py-2 rounded bg-[#111] text-white border border-gray-700 focus:outline-none"
+            className="pl-10 pr-4 py-2 rounded bg-[#111] border border-gray-700 text-white focus:outline-none"
           />
         </div>
 
         <button
           onClick={() => setShowModal(true)}
-          className="bg-[#2a2a2a] text-white px-4 py-2 rounded hover:bg-indigo-700"
+          className="bg-[#2a2a2a] hover:bg-indigo-700 text-white px-4 py-2 rounded"
         >
           + Admin Qo'shish
-        </button>
-
-        <button className="bg-[#1f1f1f] hover:bg-[#2a2a2a] text-white px-4 py-2 rounded border border-gray-700">
-          All
         </button>
       </div>
 
       <div className="overflow-x-auto rounded-lg">
-        <table className="min-w-full">
+        <table className="min-w-full text-sm">
           <thead>
-            <tr className="bg-[#1f1f1f] text-left text-sm text-gray-300">
-              <th className="py-3 px-4 font-medium">Ism</th>
-              <th className="py-3 px-4 font-medium">Familiya</th>
-              <th className="py-3 px-4 font-medium">Email</th>
-              <th className="py-3 px-4 font-medium">Rol</th>
-              <th className="py-3 px-4 font-medium">Holat</th>
-              <th className="py-3 px-4 font-medium">Amallar</th>
+            <tr className="bg-[#1f1f1f] text-left text-gray-300">
+              {['Ism', 'Familiya', 'Email', 'Rol', 'Holat', 'Amallar'].map((h) => (
+                <th key={h} className="py-3 px-4 font-medium">{h}</th>
+              ))}
             </tr>
           </thead>
-          <tbody className="text-sm">
+          <tbody>
             {filteredAdmins.length > 0 ? (
               filteredAdmins.map((admin) => (
                 <tr
-                  key={admin.id || admin.email}
+                  key={admin.id ?? admin.email}
                   className="bg-[#111] hover:bg-[#1c1c1c] border-b border-[#1c1c1c]"
                 >
                   <td className="py-3 px-4">{admin.first_name}</td>
@@ -148,7 +148,7 @@ const Admins = () => {
       </div>
 
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">
+        <div className="fixed inset-0 flex bg-black bg-opacity-70 justify-center items-center z-50">
           <div className="bg-[#1f1f1f] p-6 rounded-lg w-[400px] space-y-4">
             <h2 className="text-xl font-bold mb-2">Yangi admin qo'shish</h2>
 
@@ -157,10 +157,10 @@ const Admins = () => {
                 key={field}
                 name={field}
                 type={field === 'password' ? 'password' : 'text'}
-                value={newAdmin[field as keyof typeof newAdmin] as string}
+                value={(newAdmin as any)[field]}
                 onChange={handleChange}
                 placeholder={field.replace('_', ' ').toUpperCase()}
-                className="w-full p-2 rounded bg-[#111] text-white border border-gray-600 focus:outline-none"
+                className="w-full p-2 rounded bg-[#111] border border-gray-600 text-white focus:outline-none"
               />
             ))}
 
